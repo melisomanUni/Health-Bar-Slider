@@ -2,49 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private int _currentHealth;
-    [SerializeField] private HealtBar _healtBar;
+
+    public event UnityAction<int,int> OnHealthChange;
 
     private void Start()
     {
         _currentHealth = _maxHealth;
-        _healtBar.SetMaxHealth(_maxHealth);
     }
-
-    //private void Update()
-    //{
-    //    if(Input.GetKeyDown())
-    //    {
-
-    //    }
-    //}
 
     public void TakeDamage(int damage)
     {
-        if (_currentHealth - damage >= 0)
-        {
-            Debug.Log("Получен урон");
-            _currentHealth -= damage;
-            _healtBar.SetHealth(_currentHealth);
-            Debug.Log("Урон отображён");
-
-        }
+        _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
+        OnHealthChange?.Invoke(_currentHealth,_maxHealth);
     }
 
-    public void ReturnDamage(int damage)
+    public void Heal(int health)
     {
-        if (_currentHealth + damage <= _maxHealth)
-        {
-            Debug.Log("Лечение получено");
-            _currentHealth += damage;
-            _healtBar.SetHealth(_currentHealth);
-            Debug.Log("Лечение отображено");
-
-        }
-    }
+        _currentHealth = Mathf.Clamp(_currentHealth + health, 0, _maxHealth);
+        OnHealthChange?.Invoke(_currentHealth, _maxHealth);
+    } 
 }
