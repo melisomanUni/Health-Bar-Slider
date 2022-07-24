@@ -21,11 +21,11 @@ public class HealtBar : MonoBehaviour
 
     private void OnEnable()
     {
-        _player.OnHealthChange += ChangeHealth;
+        _player.HealthChanged += ChangeHealth;
     }
     private void OnDisable()
     {
-        _player.OnHealthChange -= ChangeHealth;
+        _player.HealthChanged -= ChangeHealth;
     }
 
     private void ChangeHealth(int currentHealth, int maxHealth)
